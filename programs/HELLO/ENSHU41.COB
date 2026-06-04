@@ -42,4 +42,5 @@
                END-PERFORM.
 
            CLOSE ENPLOYEE-FILE.
+           STOP RUN.
        

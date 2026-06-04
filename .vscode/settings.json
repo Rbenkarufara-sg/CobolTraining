@@ -20,7 +20,7 @@
         "$COPYPATH",
         "copylib"
     ],
-    "editor.fontFamily": "\"UDEV Gothic NF\", \"MS Gothic\"",
+    "editor.fontFamily": "\"UDEV Gothic NF\", \"MS 明朝\"",
     "editor.fontSize": 16,
     "terminal.integrated.fontSize": 16
 }

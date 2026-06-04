@@ -32,34 +32,57 @@
        01 010-CNT PIC 9(3) VALUE ZERO.
 
        PROCEDURE DIVISION.
-       OPEN INPUT 010-FILE.
-       OPEN OUTPUT 020-FILE.
-
+      ******************************************************************
+      * メインルーチン
+      ******************************************************************
+       PRCD-RTN SECTION.
+           PERFORM INIT-RTN.
+           PERFORM MAIN-RTN UNTIL 010-EOF = "Y".
+           PERFORM NORM-END-RTN.
+       EXT.
+           EXIT.
+      ******************************************************************
+      * 初期化
+      ******************************************************************
+       INIT-RTN SECTION.
+           OPEN INPUT 010-FILE.
+           OPEN OUTPUT 020-FILE.
            READ 010-FILE
              AT END MOVE "Y" TO 010-EOF
            END-READ.
- 
-           PERFORM UNTIL 010-EOF = "Y"
-             MOVE SPACE TO 020-REC
-             MOVE JF010-DATA-KBN TO JF020-DATA-KBN
-             MOVE JF010-JUCHU-NO TO JF020-JUCHU-NO-X
-             MOVE JF010-JUCHU-DATE TO JF020-JUCHU-DATE6
-             MOVE JF010-SHOHIN-NO TO JF020-SHOHIN-NO-X
-             MOVE JF010-SURYO-X TO JF020-SURYO-X
-             MOVE 0 TO JF020-JUCHU-Y1
-             MOVE SPACE TO JF020-ERR-KBN-TBL
-             MOVE SPACE TO JF020-SHOHIN-MEI
-             MOVE ZERO TO JF020-TANKA
-             MOVE ZERO TO JF020-KINGAKU
-             WRITE 020-REC
-             ADD 1 TO 010-CNT
-             READ 010-FILE
-               AT END MOVE "Y" TO 010-EOF
-             END-READ
-           END-PERFORM.
-
-           DISPLAY "COUNT:" 010-CNT.
+           MOVE SPACE TO 020-REC.
+       EXT.
+           EXIT.
+      ******************************************************************
+      * 繰り返し処理
+      ******************************************************************
+       MAIN-RTN SECTION.
+           MOVE JF010-DATA-KBN TO JF020-DATA-KBN
+           MOVE JF010-JUCHU-NO TO JF020-JUCHU-NO-X
+           MOVE JF010-JUCHU-DATE TO JF020-JUCHU-DATE6
+           MOVE JF010-SHOHIN-NO TO JF020-SHOHIN-NO-X
+           MOVE JF010-SURYO-X TO JF020-SURYO-X
+           MOVE 0 TO JF020-JUCHU-Y1
+           MOVE SPACE TO JF020-ERR-KBN-TBL
+           MOVE SPACE TO JF020-SHOHIN-MEI
+           MOVE ZERO TO JF020-TANKA
+           MOVE ZERO TO JF020-KINGAKU
+           WRITE 020-REC
+           ADD 1 TO 010-CNT
+           READ 010-FILE
+             AT END MOVE "Y" TO 010-EOF
+           END-READ.
+       EXT.
+           EXIT.
+      ******************************************************************
+      * 正常終了処理
+      ******************************************************************
+       NORM-END-RTN SECTION.
+           DISPLAY "*** KJBM010 START ***"
+           DISPLAY "010-CNT:" 010-CNT.
+           DISPLAY "*** KJBM010 END ***"
            CLOSE 010-FILE.
            CLOSE 020-FILE.
+       EXT.
+           EXIT.
            STOP RUN.
-           

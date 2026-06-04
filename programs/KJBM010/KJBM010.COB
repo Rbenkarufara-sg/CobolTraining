@@ -11,20 +11,20 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT 010-FILE ASSIGN TO ITF
+           SELECT ITF-FILE ASSIGN TO ITF
            ORGANIZATION LINE SEQUENTIAL.
 
-           SELECT 020-FILE ASSIGN TO OTF
+           SELECT OTF-FILE ASSIGN TO OTF
            ORGANIZATION SEQUENTIAL.
 
        DATA DIVISION.
        FILE SECTION.
-       FD 010-FILE.
-       01 010-REC.
+       FD ITF-FILE.
+       01 ITF-REC.
            COPY KJCF010.
 
-       FD 020-FILE.
-       01 020-REC.
+       FD OTF-FILE.
+       01 OTF-REC.
            COPY KJCF020.
        
        WORKING-STORAGE SECTION.
@@ -46,13 +46,13 @@
       * èâä˙âª
       ******************************************************************
        INIT-RTN SECTION.
-           OPEN INPUT 010-FILE.
-           OPEN OUTPUT 020-FILE.
-           READ 010-FILE
+           OPEN INPUT ITF-FILE.
+           OPEN OUTPUT OTF-FILE.
+           READ ITF-FILE
              AT END ADD 1 TO ITF-CNT
                     MOVE "Y" TO 010-EOF
            END-READ.
-           MOVE SPACE TO 020-REC.
+           MOVE SPACE TO OTF-REC.
        EXT.
            EXIT.
       ******************************************************************
@@ -69,10 +69,10 @@
            MOVE SPACE TO JF020-SHOHIN-MEI
            MOVE ZERO TO JF020-TANKA
            MOVE ZERO TO JF020-KINGAKU
-           WRITE 020-REC
+           WRITE OTF-REC
            ADD 1 TO OTF-CNT
            ADD 1 TO ITF-CNT
-           READ 010-FILE
+           READ ITF-FILE
              AT END MOVE "Y" TO 010-EOF
            END-READ.
        EXT.
@@ -85,8 +85,8 @@
            DISPLAY "ITF-CNT:" ITF-CNT.
            DISPLAY "OTF-CNT:" OTF-CNT.
            DISPLAY "*** KJBM010 END ***"
-           CLOSE 010-FILE.
-           CLOSE 020-FILE.
+           CLOSE ITF-FILE.
+           CLOSE OTF-FILE.
        EXT.
            EXIT.
            STOP RUN.

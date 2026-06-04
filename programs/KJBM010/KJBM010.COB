@@ -40,17 +40,17 @@
            PERFORM INIT-RTN.
            PERFORM MAIN-RTN UNTIL 010-EOF = "Y".
            PERFORM NORM-END-RTN.
-       EXT.
-           EXIT.
+           STOP RUN.
       ******************************************************************
       * èâä˙âª
       ******************************************************************
        INIT-RTN SECTION.
+           DISPLAY "*** KJBM010 START ***"
            OPEN INPUT ITF-FILE.
            OPEN OUTPUT OTF-FILE.
            READ ITF-FILE
-             AT END ADD 1 TO ITF-CNT
-                    MOVE "Y" TO 010-EOF
+             AT END MOVE "Y" TO 010-EOF
+                    NOT AT END ADD 1 TO ITF-CNT
            END-READ.
            MOVE SPACE TO OTF-REC.
        EXT.
@@ -71,9 +71,9 @@
            MOVE ZERO TO JF020-KINGAKU
            WRITE OTF-REC
            ADD 1 TO OTF-CNT
-           ADD 1 TO ITF-CNT
            READ ITF-FILE
              AT END MOVE "Y" TO 010-EOF
+             NOT AT END ADD 1 TO ITF-CNT
            END-READ.
        EXT.
            EXIT.
@@ -81,7 +81,6 @@
       * ê≥èÌèIóπèàóù
       ******************************************************************
        NORM-END-RTN SECTION.
-           DISPLAY "*** KJBM010 START ***"
            DISPLAY "ITF-CNT:" ITF-CNT.
            DISPLAY "OTF-CNT:" OTF-CNT.
            DISPLAY "*** KJBM010 END ***"
@@ -89,4 +88,3 @@
            CLOSE OTF-FILE.
        EXT.
            EXIT.
-           STOP RUN.

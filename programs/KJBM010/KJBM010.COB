@@ -29,7 +29,8 @@
        
        WORKING-STORAGE SECTION.
        01 010-EOF PIC X(1) VALUE "N".
-       01 010-CNT PIC 9(3) VALUE ZERO.
+       01 ITF-CNT PIC 9(3) VALUE ZERO.
+       01 OTF-CNT PIC 9(3) VALUE ZERO.
 
        PROCEDURE DIVISION.
       ******************************************************************
@@ -48,7 +49,8 @@
            OPEN INPUT 010-FILE.
            OPEN OUTPUT 020-FILE.
            READ 010-FILE
-             AT END MOVE "Y" TO 010-EOF
+             AT END ADD 1 TO ITF-CNT
+                    MOVE "Y" TO 010-EOF
            END-READ.
            MOVE SPACE TO 020-REC.
        EXT.
@@ -68,7 +70,8 @@
            MOVE ZERO TO JF020-TANKA
            MOVE ZERO TO JF020-KINGAKU
            WRITE 020-REC
-           ADD 1 TO 010-CNT
+           ADD 1 TO OTF-CNT
+           ADD 1 TO ITF-CNT
            READ 010-FILE
              AT END MOVE "Y" TO 010-EOF
            END-READ.
@@ -79,7 +82,8 @@
       ******************************************************************
        NORM-END-RTN SECTION.
            DISPLAY "*** KJBM010 START ***"
-           DISPLAY "010-CNT:" 010-CNT.
+           DISPLAY "ITF-CNT:" ITF-CNT.
+           DISPLAY "OTF-CNT:" OTF-CNT.
            DISPLAY "*** KJBM010 END ***"
            CLOSE 010-FILE.
            CLOSE 020-FILE.

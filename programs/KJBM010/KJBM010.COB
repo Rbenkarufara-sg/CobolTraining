@@ -36,7 +36,6 @@
       ******************************************************************
       * ÉÅÉCÉìÉãÅ[É`Éì
       ******************************************************************
-       PRCD-RTN SECTION.
            PERFORM INIT-RTN.
            PERFORM MAIN-RTN UNTIL 010-EOF = "Y".
            PERFORM NORM-END-RTN.
@@ -48,19 +47,16 @@
            DISPLAY "*** KJBM010 START ***"
            OPEN INPUT ITF-FILE.
            OPEN OUTPUT OTF-FILE.
-           READ ITF-FILE
-             AT END MOVE "Y" TO 010-EOF
-                    NOT AT END ADD 1 TO ITF-CNT
-           END-READ.
-           MOVE SPACE TO OTF-REC.
+           PERFORM READ-RTN.
        EXT.
            EXIT.
       ******************************************************************
       * åJÇËï‘Çµèàóù
       ******************************************************************
        MAIN-RTN SECTION.
+           MOVE SPACE TO OTF-REC.
            MOVE JF010-DATA-KBN TO JF020-DATA-KBN
-           MOVE JF010-JUCHU-NO TO JF020-JUCHU-NO-X
+           MOVE JF010-JUCHU-NO-X TO JF020-JUCHU-NO-X
            MOVE JF010-JUCHU-DATE TO JF020-JUCHU-DATE6
            MOVE JF010-SHOHIN-NO TO JF020-SHOHIN-NO-X
            MOVE JF010-SURYO-X TO JF020-SURYO-X
@@ -69,12 +65,8 @@
            MOVE SPACE TO JF020-SHOHIN-MEI
            MOVE ZERO TO JF020-TANKA
            MOVE ZERO TO JF020-KINGAKU
-           WRITE OTF-REC
-           ADD 1 TO OTF-CNT
-           READ ITF-FILE
-             AT END MOVE "Y" TO 010-EOF
-             NOT AT END ADD 1 TO ITF-CNT
-           END-READ.
+           PERFORM WRITE-RTN.
+           PERFORM READ-RTN.
        EXT.
            EXIT.
       ******************************************************************
@@ -83,8 +75,27 @@
        NORM-END-RTN SECTION.
            DISPLAY "ITF-CNT:" ITF-CNT.
            DISPLAY "OTF-CNT:" OTF-CNT.
-           DISPLAY "*** KJBM010 END ***"
            CLOSE ITF-FILE.
            CLOSE OTF-FILE.
+           DISPLAY "*** KJBM010 END ***"
        EXT.
            EXIT.
+      ******************************************************************
+      * ì«Ç›éÊÇËèàóù
+      ******************************************************************
+       READ-RTN SECTION.
+           READ ITF-FILE
+             AT END MOVE "Y" TO 010-EOF
+             NOT AT END ADD 1 TO ITF-CNT
+           END-READ.
+       EXT.
+           EXIT.
+      ******************************************************************
+      * èëÇ´çûÇ›èàóù
+      ******************************************************************
+       WRITE-RTN SECTION.
+           WRITE OTF-REC
+           ADD 1 TO OTF-CNT.
+       EXT.
+           EXIT.
+      

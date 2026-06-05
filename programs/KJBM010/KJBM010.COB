@@ -77,7 +77,7 @@
            DISPLAY "OTF-CNT:" OTF-CNT.
            CLOSE ITF-FILE.
            CLOSE OTF-FILE.
-           DISPLAY "*** KJBM010 END ***"
+           DISPLAY "*** KJBM010 END ***".
        EXT.
            EXIT.
       ******************************************************************

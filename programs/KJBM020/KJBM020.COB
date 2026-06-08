@@ -66,28 +66,28 @@
       ******************************************************************
        CHECK-RTN SECTION.
            MOVE SPACE TO JF020-ERR-KBN-TBL OF OTF-FILE.
-           MOVE JF020-JUCHU-Y1 OF ITF-FILE TO S010-P1-Y1
-           MOVE JF020-JUCHU-DATE6 OF ITF-FILE TO S010-DATE6
+           MOVE JF020-JUCHU-DATE OF ITF-FILE TO S010-DATE
            CALL "KCBS010" USING KCBS010-P1.
            IF JF020-DATA-KBN OF ITF-FILE NOT = "1" 
               AND JF020-DATA-KBN OF ITF-FILE NOT = "9"
              MOVE "1" TO JF020-ERR-KBN OF OTF-REC(1)
            END-IF.
            IF JF020-JUCHU-NO OF ITF-FILE NOT NUMERIC 
-              OR JF020-JUCHU-NO-X OF ITF-FILE = "0"
+              OR JF020-JUCHU-NO OF ITF-FILE = ZERO
              MOVE "1" TO JF020-ERR-KBN OF OTF-REC(2)
            END-IF.
            IF S010-RCD = "E"
              MOVE "1" TO JF020-ERR-KBN OF OTF-REC(3)
-             ELSE MOVE S010-DATE8 TO JF020-JUCHU-DATE OF OTF-FILE
+           ELSE 
+             MOVE S010-DATE8 TO JF020-JUCHU-DATE OF OTF-FILE
            END-IF.
            IF JF020-SHOHIN-NO OF ITF-FILE NOT NUMERIC 
-              OR JF020-SHOHIN-NO OF ITF-FILE = "0"
+              OR JF020-SHOHIN-NO OF ITF-FILE = ZERO
              MOVE "1" TO JF020-ERR-KBN OF OTF-REC(5)
            END-IF.
            IF JF020-SURYO OF ITF-FILE NOT NUMERIC 
-              OR JF020-SURYO OF ITF-FILE < "1"  
-              OR JF020-SURYO OF ITF-FILE > "999"
+              OR JF020-SURYO OF ITF-FILE < 1  
+              OR JF020-SURYO OF ITF-FILE > 999
              MOVE "1" TO JF020-ERR-KBN OF OTF-REC(6)
            END-IF.
        EXT.
@@ -108,8 +108,10 @@
       ******************************************************************
        READ-RTN SECTION.
            READ ITF-FILE
-             AT END MOVE "Y" TO 020-EOF
-             NOT AT END ADD 1 TO ITF-CNT
+             AT END 
+               MOVE "Y" TO 020-EOF
+             NOT AT END 
+               ADD 1 TO ITF-CNT
            END-READ.
        EXT.
            EXIT.

@@ -44,7 +44,11 @@
            PERFORM INIT-RTN.
            PERFORM MAIN-RTN UNTIL KUBM-EOF = "Y".
            IF WK-KUCF NOT = LOW-VALUE
+             MOVE SPACE TO OTF-REC
              MOVE WK-TOTAL TO UF020-KINGAKU
+             MOVE WK-JUCHU-YY TO UF020-JUCHU-YY
+             MOVE WK-JUCHU-MM TO UF020-JUCHU-MM
+             MOVE WK-SHOHIN-NO TO UF020-SHOHIN-NO
              PERFORM WRITE-RTN
            END-IF.
            PERFORM END-RTN.
@@ -76,6 +80,7 @@
              PERFORM READ-RTN
            ELSE 
              IF WK-KUCF NOT = LOW-VALUE
+               MOVE SPACE TO OTF-REC
                MOVE WK-TOTAL TO UF020-KINGAKU
                MOVE WK-JUCHU-YY TO UF020-JUCHU-YY
                MOVE WK-JUCHU-MM TO UF020-JUCHU-MM

@@ -33,7 +33,7 @@
            03 WK-SHOHIN-NO PIC X(5) VALUE LOW-VALUE.
            03 WK-JUCHU-YY  PIC X(4) VALUE LOW-VALUE.
            03 WK-JUCHU-MM  PIC X(2) VALUE LOW-VALUE.
-       01 WK-TOTAL PIC 9(9) VALUE ZERO.
+       01 WK-TOTAL PIC S9(9) VALUE ZERO.
        01 ITF-CNT  PIC 9(3) VALUE ZERO.
        01 OTF-CNT  PIC 9(3) VALUE ZERO.
 
@@ -43,14 +43,6 @@
       ******************************************************************
            PERFORM INIT-RTN.
            PERFORM MAIN-RTN UNTIL KUBM-EOF = "Y".
-           IF WK-KUCF NOT = LOW-VALUE
-             MOVE SPACE TO OTF-REC
-             MOVE WK-TOTAL TO UF020-KINGAKU
-             MOVE WK-JUCHU-YY TO UF020-JUCHU-YY
-             MOVE WK-JUCHU-MM TO UF020-JUCHU-MM
-             MOVE WK-SHOHIN-NO TO UF020-SHOHIN-NO
-             PERFORM WRITE-RTN
-           END-IF.
            PERFORM END-RTN.
            STOP RUN.
       ******************************************************************
@@ -98,6 +90,14 @@
       * èIóπèàóù
       ******************************************************************
        END-RTN SECTION.
+           IF WK-KUCF NOT = LOW-VALUE
+             MOVE SPACE TO OTF-REC
+             MOVE WK-TOTAL TO UF020-KINGAKU
+             MOVE WK-JUCHU-YY TO UF020-JUCHU-YY
+             MOVE WK-JUCHU-MM TO UF020-JUCHU-MM
+             MOVE WK-SHOHIN-NO TO UF020-SHOHIN-NO
+             PERFORM WRITE-RTN
+           END-IF.
            DISPLAY "ITF-CNT:" ITF-CNT.
            DISPLAY "OTF-CNT:" OTF-CNT.
            CLOSE ITF-FILE.

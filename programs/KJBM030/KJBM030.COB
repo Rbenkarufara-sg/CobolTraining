@@ -69,18 +69,16 @@
            IF JF020-ERR-KBN OF ITF-REC(5) = SPACE
              EVALUATE TRUE
                WHEN JF020-SHOHIN-NO OF ITF-REC = CFSHO-SHOHIN-NO 
-                AND (JF020-ERR-KBN OF ITF-REC(6) = SPACE)
+                 IF (JF020-ERR-KBN OF ITF-REC(6) = SPACE)
+                   COMPUTE JF020-KINGAKU OF OTF-REC = 
+                    JF020-SURYO OF ITF-REC * CFSHO-TANKA
+                 ELSE
+                   IF (JF020-ERR-KBN OF ITF-REC(6) NOT = SPACE)
+                     MOVE ZERO TO JF020-KINGAKU OF OTF-REC
+                   END-IF
+                 END-IF
                  MOVE CFSHO-SHOHIN-MEI TO JF020-SHOHIN-MEI OF OTF-REC
                  MOVE CFSHO-TANKA TO JF020-TANKA OF OTF-REC
-                 COMPUTE JF020-KINGAKU OF OTF-REC = 
-                  JF020-SURYO OF ITF-REC * CFSHO-TANKA
-                 PERFORM WRITE-RTN
-                 PERFORM ITF-READ-RTN
-               WHEN JF020-SHOHIN-NO OF ITF-REC = CFSHO-SHOHIN-NO 
-                AND (JF020-ERR-KBN OF ITF-REC(6) NOT = SPACE)
-                 MOVE CFSHO-SHOHIN-MEI TO JF020-SHOHIN-MEI OF OTF-REC
-                 MOVE CFSHO-TANKA TO JF020-TANKA OF OTF-REC
-                 MOVE ZERO TO JF020-KINGAKU OF OTF-REC
                  PERFORM WRITE-RTN
                  PERFORM ITF-READ-RTN
                WHEN JF020-SHOHIN-NO OF ITF-REC < CFSHO-SHOHIN-NO

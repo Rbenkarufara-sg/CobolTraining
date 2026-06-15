@@ -132,7 +132,7 @@
            DISPLAY "!!! FETCHDB ABEND : DATABSE ACCESS ERRROR !!!".
            DISPLAY "SQLCODE:" SQLCODE.
            DISPLAY "SQLERRMC:" SQLERRMC.
-           MOVE 9 TO RETURN-CODE.
+           MOVE "9" TO RETURN-CODE.
            STOP RUN.
        EXT.
            EXIT.
@@ -147,5 +147,5 @@
            DISPLAY "OTF-CNT:" OTF-CNT.
            DISPLAY "*** KJBM011 END ***".
        EXT.
-           STOP RUN.
+           EXIT.
      

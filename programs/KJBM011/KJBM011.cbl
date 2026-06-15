@@ -100,7 +100,6 @@
       * èëÇ´çûÇ›èàóù
       ******************************************************************
        WRITE-RTN SECTION.
-           INITIALIZE OTF-REC.
            MOVE SPACE TO OTF-REC.
            MOVE CMJUCHU-DATA-KBN TO JF020-DATA-KBN.
            MOVE CMJUCHU-JUCHU-NO TO JF020-JUCHU-NO-X.
@@ -130,7 +129,7 @@
       * ÉGÉâÅ[èIóπèàóù
       ******************************************************************
        ERROR-RTN SECTION.
-           DISPLAY "!!! FETCHDB ABEND : DATABSE ACCESS ERROR !!!".
+           DISPLAY "!!! FETCHDB ABEND : DATABSE ACCESS ERRROR !!!".
            DISPLAY "SQLCODE:" SQLCODE.
            DISPLAY "SQLERRMC:" SQLERRMC.
            MOVE 9 TO RETURN-CODE.

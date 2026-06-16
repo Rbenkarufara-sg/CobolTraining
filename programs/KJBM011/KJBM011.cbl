@@ -41,7 +41,7 @@
       * メインルーチン
       ******************************************************************
            PERFORM INIT-RTN.
-           PERFORM WRITE-RTN UNTIL FETCH-EOF = "Y".
+           PERFORM MAIN-RTN UNTIL FETCH-EOF = "Y".
            PERFORM SUCCESSFUL-END-RTN.
            STOP RUN.
       ******************************************************************
@@ -97,9 +97,9 @@
        EXT.
            EXIT.
       ******************************************************************
-      * 書き込み処理
+      * メイン処理
       ******************************************************************
-       WRITE-RTN SECTION.
+       MAIN-RTN SECTION.
            MOVE SPACE TO OTF-REC.
            MOVE CMJUCHU-DATA-KBN TO JF020-DATA-KBN.
            MOVE CMJUCHU-JUCHU-NO TO JF020-JUCHU-NO-X.
@@ -111,10 +111,16 @@
            MOVE SPACE TO JF020-SHOHIN-MEI.
            MOVE ZERO TO JF020-TANKA.
            MOVE ZERO TO JF020-KINGAKU.
-
+           
+           PERFORM WRITE-RTN.
+       EXT.
+           EXIT.
+      ******************************************************************
+      * 書き込み処理
+      ******************************************************************
+       WRITE-RTN SECTION.
            WRITE OTF-REC.
            ADD 1 TO OTF-CNT.
-
            PERFORM FETCH-RTN.
        EXT.
            EXIT.
@@ -122,6 +128,7 @@
       * 通常終了処理
       ******************************************************************
        SUCCESSFUL-END-RTN SECTION.
+           EXEC SQL COMMIT END-EXEC.
            PERFORM END-RTN.
        EXT.
            EXIT.
@@ -129,11 +136,12 @@
       * エラー終了処理
       ******************************************************************
        ERROR-RTN SECTION.
-           DISPLAY "!!! FETCHDB ABEND : DATABSE ACCESS ERRROR !!!".
+           EXEC SQL ROLLBACK END-EXEC.
+           DISPLAY "!!! FETCHDB ABEND : DATABASE ACCESS ERROR !!!".
            DISPLAY "SQLCODE:" SQLCODE.
            DISPLAY "SQLERRMC:" SQLERRMC.
            MOVE "9" TO RETURN-CODE.
-           STOP RUN.
+           PERFORM END-RTN.
        EXT.
            EXIT.
       ******************************************************************

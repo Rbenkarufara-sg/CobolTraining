@@ -77,11 +77,11 @@
       ******************************************************************
       *    KCCMJUCHU: 受注マスタ
       ******************************************************************
-           03 CMJUCHU-DATA-KBN           PIC  9(01).
-           03 CMJUCHU-JUCHU-NO           PIC  9(04).
-           03 CMJUCHU-JUCHU-DATE         PIC  X(06).
-           03 CMJUCHU-SHOHIN-NO          PIC  X(05).
-           03 CMJUCHU-SURYO              PIC  9(05).
+           03  CMJUCHU-DATA-KBN           PIC  9(01).
+           03  CMJUCHU-JUCHU-NO           PIC  9(04).
+           03  CMJUCHU-JUCHU-DATE         PIC  X(06).
+           03  CMJUCHU-SHOHIN-NO          PIC  X(05).
+           03  CMJUCHU-SURYO              PIC  9(05).
       *EXEC SQL DECLARE JUCHU-CUR CURSOR FOR
       *    SELECT *
       *    FROM KCCMJUCHU
@@ -112,7 +112,7 @@
       * メインルーチ
       ******************************************************************
            PERFORM INIT-RTN.
-           PERFORM WRITE-RTN UNTIL FETCH-EOF = "Y".
+           PERFORM MAIN-RTN UNTIL FETCH-EOF = "Y".
            PERFORM SUCCESSFUL-END-RTN.
            STOP RUN.
       ******************************************************************
@@ -162,7 +162,7 @@
        EXT.
            EXIT.
       ******************************************************************
-      * レコードを1行
+      * 読み取り処理（レコードを１行ずつ）
       ******************************************************************
        FETCH-RTN SECTION.
       *    EXEC SQL FETCH JUCHU-CUR
@@ -217,10 +217,9 @@
        EXT.
            EXIT.
       ******************************************************************
-      *
+      * メイ
       ******************************************************************
-       WRITE-RTN SECTION.
-           INITIALIZE OTF-REC.
+       MAIN-RTN SECTION.
            MOVE SPACE TO OTF-REC.
            MOVE CMJUCHU-DATA-KBN TO JF020-DATA-KBN.
            MOVE CMJUCHU-JUCHU-NO TO JF020-JUCHU-NO-X.
@@ -233,9 +232,15 @@
            MOVE ZERO TO JF020-TANKA.
            MOVE ZERO TO JF020-KINGAKU.
 
+           PERFORM WRITE-RTN.
+       EXT.
+           EXIT.
+      ******************************************************************
+      *
+      ******************************************************************
+       WRITE-RTN SECTION.
            WRITE OTF-REC.
            ADD 1 TO OTF-CNT.
-
            PERFORM FETCH-RTN.
        EXT.
            EXIT.
@@ -243,6 +248,9 @@
       * 通常終
       ******************************************************************
        SUCCESSFUL-END-RTN SECTION.
+      *    EXEC SQL COMMIT END-EXEC.
+           CALL OCSQLCMT USING SQLCA END-CALL
+                                   .
            PERFORM END-RTN.
        EXT.
            EXIT.
@@ -250,11 +258,14 @@
       * エラー終
       ******************************************************************
        ERROR-RTN SECTION.
-           DISPLAY "!!! FETCHDB ABEND : DATABSE ACCESS ERROR !!!".
+      *    EXEC SQL ROLLBACK END-EXEC.
+           CALL OCSQLRBK USING SQLCA END-CALL
+                                     .
+           DISPLAY "!!! FETCHDB ABEND : DATABASE ACCESS ERROR !!!".
            DISPLAY "SQLCODE:" SQLCODE.
            DISPLAY "SQLERRMC:" SQLERRMC.
-           MOVE 9 TO RETURN-CODE.
-           STOP RUN.
+           MOVE "9" TO RETURN-CODE.
+           PERFORM END-RTN.
        EXT.
            EXIT.
       ******************************************************************
@@ -273,7 +284,7 @@
            DISPLAY "OTF-CNT:" OTF-CNT.
            DISPLAY "*** KJBM011 END ***".
        EXT.
-           STOP RUN.
+           EXIT.
 
       **********************************************************************
       *  : ESQL for GnuCOBOL/OpenCOBOL Version 3 (2024.11.27) Build Jun  1 2026

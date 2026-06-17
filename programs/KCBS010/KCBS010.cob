@@ -39,28 +39,24 @@
       * 入力チェック
       ******************************************************************
        INPUT-CHK-RTN SECTION.
-           IF S010-DATE NOT NUMERIC
-             MOVE "E" TO S010-RCD
-             GO TO EXT
-           END-IF.
-           
-           IF (S010-D6-MM < 1) OR (S010-D6-MM > 12)
-             MOVE "E" TO S010-RCD
-             GO TO EXT
-           END-IF.
-           
-           EVALUATE TRUE
-              WHEN S010-D6-MM = 2
-                MOVE 29 TO WK-DD
-              WHEN S010-D6-MM = 4 OR 6 OR 9 OR 11
-                MOVE 30 TO WK-DD
-              WHEN OTHER
-                MOVE 31 TO WK-DD
-           END-EVALUATE.
-
-           IF S010-D6-DD < 1 OR S010-D6-DD > WK-DD
-             MOVE "E" TO S010-RCD
-             GO TO EXT
+           IF S010-DATE IS NUMERIC
+             IF (S010-D6-MM >= 1) AND (S010-D6-MM <= 12)
+               EVALUATE TRUE
+                 WHEN S010-D6-MM = 2
+                   MOVE 29 TO WK-DD
+                 WHEN S010-D6-MM = 4 OR 6 OR 9 OR 11
+                   MOVE 30 TO WK-DD
+                 WHEN OTHER
+                   MOVE 31 TO WK-DD
+               END-EVALUATE
+               IF S010-D6-DD < 1 OR S010-D6-DD > WK-DD
+                 MOVE "E" TO S010-RCD
+               END-IF
+             ELSE
+                 MOVE "E" TO S010-RCD
+             END-IF
+           ELSE
+               MOVE "E" TO S010-RCD
            END-IF.
        EXT.
            EXIT.
@@ -106,8 +102,3 @@
            END-IF.
        EXT.
            EXIT.
-
-             
-
-
-              

@@ -3,40 +3,19 @@ set -xEeuo pipefail
 
 #SELLが置かれている位置
 SCRIPTDIR=$(cd $(dirname $0); pwd)
-#ITF・OTFの場所
-BINDIR="${SCRIPTDIR}"
-#COPYLIBの場所
-COPYLIBDIR="${SCRIPTDIR}/../copylib"
-#COBOLプログラムの場所
-PROGRAM="${SCRIPTDIR}"
-
-
-# コンパイル
-SRCFILE="${PROGRAM}/KJBM010/KJBM010.COB"
-BINFILE=$(basename -s .COB $SRCFILE)
-BINFILE="${BINFILE}.exe"
-
-cobc -x -o "${BINDIR}/${BINFILE}" -I"${COPYLIBDIR}" "${SRCFILE}"
 
 export ITF="${SCRIPTDIR}/data/KJJD010I.txt"
 export OTF="${SCRIPTDIR}/data/KJBM010O.dat"
 
-${BINDIR}/${BINFILE} | iconv -f cp932
+${SCRIPTDIR}/KJBM010/KJBM010 | iconv -f cp932
 
-
-# コンパイル
-SRCFILE="${PROGRAM}/KJBM020/KJBM020.COB"
-BINFILE=$(basename -s .COB $SRCFILE)
-BINFILE="${BINFILE}.exe"
-
-cobc -x -o "${BINDIR}/${BINFILE}" -I"${COPYLIBDIR}" "${SRCFILE}" "${PROGRAM}/KCBS010/KCBS010.cob"
-
+export COB_LIBRARY_PATH="${SCRIPTDIR}/KCBS010"
 export ITF="${SCRIPTDIR}/data/KJBM010O.dat"
 export OTF="${SCRIPTDIR}/data/KJBM020O.dat"
 
-${BINDIR}/${BINFILE} | iconv -f cp932
+${SCRIPTDIR}/KJBM020/KJBM020 | iconv -f cp932
 
-
+#商品番号の昇順に並び替える
 CTRLFILE=$(mktemp)
 trap "rm -f $CTRLFILE" EXIT
 
@@ -48,48 +27,24 @@ _EOF_
 
 gcsort TAKE $CTRLFILE
 
-
-# コンパイル
-SRCFILE="${PROGRAM}/KJBM030/KJBM030.COB"
-BINFILE=$(basename -s .COB $SRCFILE)
-BINFILE="${BINFILE}.exe"
-
-cobc -x -o "${BINDIR}/${BINFILE}" -I"${COPYLIBDIR}" "${SRCFILE}"
-
 export ITF="${SCRIPTDIR}/data/SORT1O.dat"
 export IMF="${SCRIPTDIR}/data/KCCFSHO.dat"
 export OTF="${SCRIPTDIR}/data/KJBM030O.dat"
 
-${BINDIR}/${BINFILE} | iconv -f cp932
-
-
-# コンパイル
-SRCFILE="${PROGRAM}/KJBM050/KJBM050.COB"
-BINFILE=$(basename -s .COB $SRCFILE)
-BINFILE="${BINFILE}.exe"
-
-cobc -x -o "${BINDIR}/${BINFILE}" -I"${COPYLIBDIR}" "${SRCFILE}"
+${SCRIPTDIR}/KJBM030/KJBM030 | iconv -f cp932
 
 export ITF="${SCRIPTDIR}/data/KJBM030O.dat"
 export OTF1="${SCRIPTDIR}/data/KJBM050O1.dat"
 export OTF2="${SCRIPTDIR}/data/KJBM050O2.dat"
 
-${BINDIR}/${BINFILE} | iconv -f cp932
-
-
-# コンパイル
-SRCFILE="${PROGRAM}/KUBM010/KUBM010.COB"
-BINFILE=$(basename -s .COB $SRCFILE)
-BINFILE="${BINFILE}.exe"
-
-cobc -x -o "${BINDIR}/${BINFILE}" -I"${COPYLIBDIR}" "${SRCFILE}"
+${SCRIPTDIR}/KJBM050/KJBM050 | iconv -f cp932
 
 export ITF="${SCRIPTDIR}/data/KJBM050O1.dat"
 export OTF="${SCRIPTDIR}/data/KUBM010O.dat"
 
-${BINDIR}/${BINFILE} | iconv -f cp932
+${SCRIPTDIR}/KUBM010/KUBM010 | iconv -f cp932
 
-
+#商品番号の昇順、同一商品内は受注弁月の昇順に並び替える
 CTRLFILE=$(mktemp)
 trap "rm -f $CTRLFILE" EXIT
 
@@ -101,15 +56,7 @@ _EOF_
 
 gcsort TAKE $CTRLFILE
 
-
-# コンパイル
-SRCFILE="${PROGRAM}/KUBM020/KUBM020.COB"
-BINFILE=$(basename -s .COB $SRCFILE)
-BINFILE="${BINFILE}.exe"
-
-cobc -x -o "${BINDIR}/${BINFILE}" -I"${COPYLIBDIR}" "${SRCFILE}"
-
 export ITF="${SCRIPTDIR}/data/SORT2O.dat"
 export OTF="${SCRIPTDIR}/data/KUBM020O.dat"
 
-${BINDIR}/${BINFILE} | iconv -f cp932
+${SCRIPTDIR}/KUBM020/KUBM020 | iconv -f cp932
